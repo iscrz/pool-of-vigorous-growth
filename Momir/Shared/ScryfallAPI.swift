@@ -15,12 +15,14 @@ enum ScryfallAPI {
         
         return URLSession.shared
             .dataTaskPublisher(for: Self.url(manaValue: manaValue))
+            .print("data")
             .map { try! JSONDecoder().decode(DTO.Card.self, from: $0.data) }
+            .print("card")
             .map { card in
                 
                 URLSession
                     .shared
-                    .dataTaskPublisher(for: URL(string: card.image_uris.normal)!)
+                    .dataTaskPublisher(for: URL(string: card.image_uris!.normal!)!)
                     .map { CardResult(data: card, image: UIImage(data: $0.data))  }
                     .eraseToAnyPublisher()
             }
@@ -42,7 +44,10 @@ enum ScryfallAPI {
     
     static func url(manaValue: Int) -> URL {
         
-        let item = URLQueryItem(name: "q", value: "art:ravnica t:creature -is:token -o:search mv:\(manaValue)")
+        let item = URLQueryItem(name: "q", value: "art:ravnica t:creature -is:token -is:dfc -o:search mv:\(manaValue)")
+        
+        //let item = URLQueryItem(name: "q", value: "f:edh t:creature -is:token -is:dfc -o:search mv:\(manaValue)")
+        
         
         var components = URLComponents()
         components.scheme = "https"
@@ -63,13 +68,13 @@ enum ScryfallAPI {
             
             let id: String
             let name: String
-            let image_uris: ImageURIs
+            let image_uris: ImageURIs?
             
             struct ImageURIs: Decodable {
-                let small: String
-                let normal: String
-                let large: String
-                let png: String
+                let small: String?
+                let normal: String?
+                let large: String?
+                let png: String?
             }
         }
     }

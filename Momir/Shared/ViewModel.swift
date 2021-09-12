@@ -9,10 +9,37 @@ import Foundation
 import SwiftUI
 import Combine
 
+struct CardRequest: Identifiable {
+    let id = UUID().uuidString
+    let manaValue: Int
+}
+
+class CardState: ObservableObject {
+    
+    @Published var image: UIImage?
+    
+    let request: CardRequest
+    
+    var fetchToken: AnyCancellable?
+    
+    init(_ request: CardRequest) {
+        self.request = request
+        
+        fetchToken = ScryfallAPI.fetchData(manaValue: request.manaValue)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+            } receiveValue: { cardResult in
+                self.image = cardResult.image
+            }
+        
+    }
+}
+
 class ViewModel: ObservableObject {
     
     @Published private(set) var manaValue: Int = 0
     @Published var cards: [ScryfallAPI.CardResult] = []
+    @Published var cardRequests: [CardRequest] = []
     
     var subs = [AnyCancellable]()
 
@@ -29,7 +56,10 @@ class ViewModel: ObservableObject {
     }
     
     func submit() {
-        ScryfallAPI.fetchData(manaValue: manaValue)
+        
+        cardRequests.append(CardRequest(manaValue: manaValue))
+        
+        return ScryfallAPI.fetchData(manaValue: manaValue)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 print(completion)
