@@ -61,8 +61,14 @@ struct CardView: View {
     @StateObject var state: CardState
     @State var opacity = 0.0
     
+    @State private var rotating = false
+
+    
     var body: some View {
-        VStack {
+        return VStack {
+            
+            
+            
             if state.image != nil {
                 Image(uiImage: state.image!)
                     .resizable()
@@ -75,14 +81,18 @@ struct CardView: View {
                         }
                     }
             } else {
-                ProgressView()
-                    .frame(width: 25, height: 25, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                    
-                    .background(Color.black.opacity(0.2).cornerRadius(12))
-                    .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
-                    .scaleEffect(2)
+                
+                Image("Simic_Logo2")
+                    .rotationEffect(Angle(degrees: rotating ? 360 : 0))
+                    .animation(Animation.linear(duration: 2.0).repeatForever(autoreverses: false), value: rotating)
+                    .transition(.opacity)
+                    .onAppear {
+                        self.rotating = true
+                    }
                 
             }
+            
+            
         }
     }
 }
