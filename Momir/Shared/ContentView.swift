@@ -13,8 +13,19 @@ struct ContentView: View {
    
     var body: some View {
         ZStack {
+            GeometryReader { geo in
+                
+                Image("momir-bg")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
+                    .clipped()
+                
+            }
+            
             VStack {
                 Spacer()
+                
                 HStack {
                     
                     Button(action: {
@@ -46,11 +57,12 @@ struct ContentView: View {
                     })
                 }
                 .padding()
-                //.background(Color.white)
+                
                 
                 ScrollViewReader { scrollview in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(alignment: .center, spacing: 5.0) {
+                            
                             ForEach(viewModel.cardRequests) { request in
                                 CardView(state: CardState(request))
                                     .id(request.id)
@@ -63,24 +75,16 @@ struct ContentView: View {
                                 .frame(width: 250 * (63/88))
                             
                             Spacer(minLength: 10.0 + (250 * (63/88) * 0.5))
-                            }
                         }
                     }
-                    .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealWidth: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 100, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: 250, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 }
-                .padding(.bottom)
-            
-            Spacer(minLength: 50)
+                .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealWidth: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 100, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: 250, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                
+            }
+            .padding(.bottom, 50)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
-        .background(
-            Image("momir-bg")
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea()
-        )
     }
 }
 

@@ -42,12 +42,17 @@ enum ScryfallAPI {
 //            }
     }
     
-    static func url(manaValue: Int) -> URL {
+    static func url(manaValue: Int, softcap: Int = 8) -> URL {
         
-        let item = URLQueryItem(name: "q", value: "art:ravnica t:creature -is:token -is:dfc -o:search mv:\(manaValue)")
+        var query = "art:ravnica t:creature -is:token -is:dfc -o:search "
         
-        //let item = URLQueryItem(name: "q", value: "f:edh t:creature -is:token -is:dfc -o:search mv:\(manaValue)")
+        if manaValue <= softcap {
+            query += "mv:\(manaValue)"
+        } else {
+            query += "(mv>=\(softcap) AND mv<=\(manaValue))"
+        }
         
+        let item = URLQueryItem(name: "q", value: query)
         
         var components = URLComponents()
         components.scheme = "https"
