@@ -16,19 +16,37 @@ struct ContentView: View {
             VStack {
                 Spacer()
                 HStack {
-                    Button("-") {
+                    
+                    Button(action: {
                         viewModel.decCount()
-                    }
+                    }, label: {
+                        Image(systemName: "minus.circle")
+                            .foregroundColor(.white)
+                            .shadow(color: .purple, radius: 20, x: 10.0, y:10.0)
+                    })
                     
-                    Button(viewModel.buttonTitle) {
+                    
+                    Button(action: {
                         viewModel.submit()
-                    }
+                    }, label: {
+                        Image(viewModel.buttonTitle)
+                            .resizable()
+                            .frame(width: 50, height: 50, alignment: .center)
+                            .background(Color.clear)
+                            .shadow(color: .black, radius: 10.0, x: -10.0, y:10.0)
+                    })
+                    .padding()
                     
-                    Button("+") {
+                    Button(action: {
                         viewModel.incCount()
-                    }
+                    }, label: {
+                        Image(systemName: "plus.circle")
+                            .foregroundColor(.white)
+                            .shadow(color: .purple, radius: 20, x: 10.0, y:10.0)
+                    })
                 }
-                .background(Color.white)
+                .padding()
+                //.background(Color.white)
                 
                 ScrollViewReader { scrollview in
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -50,9 +68,19 @@ struct ContentView: View {
                     }
                     .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealWidth: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 100, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: 250, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 }
+                .padding(.bottom)
+            
+            Spacer(minLength: 50)
         }
-        .background(Image("momir-bg").resizable()
-                        .aspectRatio(contentMode: .fill))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea()
+        .background(
+            Image("momir-bg")
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+        )
     }
 }
 
@@ -75,6 +103,7 @@ struct CardView: View {
                     .aspectRatio(contentMode: .fit)
                     .cornerRadius(10.0)
                     .opacity(opacity)
+                    //.shadow(color: .black, radius: 10.0, x: -10.0, y:10.0)
                     .onAppear {
                         withAnimation {
                             opacity = 1.0
@@ -86,6 +115,7 @@ struct CardView: View {
                     .rotationEffect(Angle(degrees: rotating ? 360 : 0))
                     .animation(Animation.linear(duration: 2.0).repeatForever(autoreverses: false), value: rotating)
                     .transition(.opacity)
+                    .shadow(color: .black.opacity(0.3), radius: 10.0, x: -20.0, y:20.0)
                     .onAppear {
                         self.rotating = true
                     }
