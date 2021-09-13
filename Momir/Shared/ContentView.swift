@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     
     @ObservedObject var viewModel = ViewModel()
+    
+    @State var scale: CGFloat = 1.0
    
     var body: some View {
         ZStack {
@@ -30,6 +32,7 @@ struct ContentView: View {
                     
                     Button(action: {
                         viewModel.decCount()
+                        scale *= 0.97
                     }, label: {
                         Image(systemName: "minus.circle")
                             .foregroundColor(.white)
@@ -43,13 +46,16 @@ struct ContentView: View {
                         Image(viewModel.buttonTitle)
                             .resizable()
                             .frame(width: 50, height: 50, alignment: .center)
-                            .background(Color.clear)
-                            .shadow(color: .black, radius: 10.0, x: -10.0, y:10.0)
+                            
+                        
                     })
+                    .scaleEffect(viewModel.buttonScale)
                     .padding()
+                    .animation(.interpolatingSpring(stiffness: 350, damping: 5, initialVelocity: 30), value: viewModel.buttonScale)
                     
                     Button(action: {
                         viewModel.incCount()
+                        scale *= 1.03
                     }, label: {
                         Image(systemName: "plus.circle")
                             .foregroundColor(.white)
@@ -57,6 +63,7 @@ struct ContentView: View {
                     })
                 }
                 .padding()
+                .shadow(color: .black, radius: 10.0, x: -10.0, y:10.0)
                 
                 
                 ScrollViewReader { scrollview in

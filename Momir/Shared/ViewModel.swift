@@ -55,6 +55,10 @@ class ViewModel: ObservableObject {
         manaValue = max(0, manaValue - 1)
     }
     
+    var buttonScale: CGFloat {
+        1.0 + (CGFloat(manaValue) / 20.0 * 0.7)
+    }
+    
     func submit() {
         
         cardRequests.append(CardRequest(manaValue: manaValue))

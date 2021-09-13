@@ -42,7 +42,7 @@ enum ScryfallAPI {
 //            }
     }
     
-    static func url(manaValue: Int, softcap: Int = 8) -> URL {
+    static func url(manaValue: Int, softcap: Int = 7) -> URL {
         
         var query = "art:ravnica t:creature -is:token -is:dfc -o:search "
         
